@@ -40,8 +40,10 @@ const person = {
   gravidade: 0.25,
   velocidade: 0,
   atualiza() {
-    person.velocidade = person.velocidade + person.gravidade;
-    person.y = person.y + person.velocidade
+    if(person.y <= 315) {
+      person.velocidade = person.velocidade + person.gravidade;
+      person.y = person.y + person.velocidade
+    }
   },
   desenha() {
     contexto.drawImage(
