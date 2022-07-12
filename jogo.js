@@ -57,6 +57,12 @@ const person = {
   y: 315,
   width: 80,
   height: 80,
+  pulo: 30,
+  pula() {
+    console.log('devo pular');
+    
+    person.velocidade = 0
+  },
   gravidade: 0.25,
   velocidade: 0,
   atualiza() {
@@ -99,6 +105,9 @@ Telas.JOGO = {
   desenha() {
     chao.desenha()
     person.desenha()
+  },
+  click() {
+    person.pula()
   },
   atualiza() {
     person.atualiza()
