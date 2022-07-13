@@ -1,12 +1,19 @@
 const sprites = new Image();
 sprites.src = './sprites.png';
+
 const spriteChao = new Image();
 spriteChao.src = './fundo.jpg';
+
 const spriteInicio = new Image();
 spriteInicio.src = './inicio.png'
 
+const spriteBarril = new Image();
+spriteBarril.src = './spritebarril.png'
+
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
+
+
 
 const telaInicial = {
   spriteX: 0,
@@ -25,6 +32,31 @@ const telaInicial = {
       telaInicial.x, telaInicial.y,
       telaInicial.width, telaInicial.height
     )
+  }
+}
+const globais = {}
+const barril = {
+  spriteX: 0,
+  spriteY: 0,
+  largura: 360,
+  altura: 403,
+  x: 300,
+  y: 325,
+  width: 60,
+  height: 60,
+  velocidade: 0,
+  desenha() {
+    contexto.drawImage(
+      spriteBarril,
+      barril.spriteX, barril.spriteY,
+      barril.largura, barril.altura,
+      barril.x, barril.y,
+      barril.width, barril.height
+    )
+  },
+  atualiza() {
+    barril.velocidade = barril.velocidade + 1;
+    barril.x = barril.x - 6
   }
 }
 
@@ -48,6 +80,7 @@ const chao = {
   }
 }
 
+
 const person = {
   spriteX: 100,
   spriteY: 85,
@@ -60,8 +93,18 @@ const person = {
   pulo: 30,
   pula() {
     console.log('devo pular');
-    
-    person.velocidade = 0
+    if (person.y >= 310) {
+      person.velocidade = 0
+      setTimeout(() => { person.y = person.y - 20 }, 25)
+      setTimeout(() => { person.y = person.y - 20 }, 50)
+      setTimeout(() => { person.y = person.y - 20 }, 75)
+      setTimeout(() => { person.y = person.y - 20 }, 100)
+      setTimeout(() => { person.y = person.y - 20 }, 125)
+      setTimeout(() => { person.y = person.y - 20 }, 150)
+      setTimeout(() => { person.y = person.y - 20 }, 175)
+      setTimeout(() => { person.y = person.y - 20 }, 200)
+      setTimeout(() => { person.y = person.y - 20 }, 225)
+    }
   },
   gravidade: 0.25,
   velocidade: 0,
@@ -105,12 +148,14 @@ Telas.JOGO = {
   desenha() {
     chao.desenha()
     person.desenha()
+    barril.desenha()
   },
   click() {
     person.pula()
   },
   atualiza() {
     person.atualiza()
+    barril.atualiza()
   }
 }
 
@@ -121,8 +166,8 @@ function loop() {
   requestAnimationFrame(loop)
 
 }
-window.addEventListener('click', function(){
-  if(telaAtiva.click){
+window.addEventListener('click', function () {
+  if (telaAtiva.click) {
     telaAtiva.click()
   }
 })
