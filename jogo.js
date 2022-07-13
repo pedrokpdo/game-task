@@ -31,7 +31,6 @@ function criaPerson() {
     height: 80,
     pulo: 30,
     pula() {
-      console.log('devo pular');
       if (person.y >= 310) {
         person.velocidade = 0
         setTimeout(() => { person.y = person.y - 20 }, 25)
@@ -65,7 +64,7 @@ function criaPerson() {
       const baseDoIncremento = 1;
       const incremento = baseDoIncremento + person.frameAtual;
       const baseRepeticao = person.movimentos.length;
-      setTimeout(() => {person.frameAtual = incremento % baseRepeticao;}, 50)
+      setTimeout(() => { person.frameAtual = incremento % baseRepeticao; }, 50)
     },
     desenha() {
       person.atualizaOFrame()
@@ -91,13 +90,9 @@ function criaChao() {
     x: 0,
     y: 0,
     atualiza() {
-      console.log('chao se moe')
       const movimentoDoChao = 1;
       const repeteEm = chao.largura / 2
       const movimentacao = chao.x - movimentoDoChao
-
-      console.log(chao.x)
-      console.log(repeteEm)
       chao.x = movimentacao % repeteEm
     },
     width: 2000,
@@ -115,7 +110,7 @@ function criaChao() {
   return chao
 }
 
-function criaBarril( ) {
+function criaBarril() {
   const barril = {
     spriteX: 0,
     spriteY: 0,
@@ -127,16 +122,27 @@ function criaBarril( ) {
     height: 60,
     velocidade: 0,
     desenha() {
-      contexto.drawImage(
-        spriteBarril,
-        barril.spriteX, barril.spriteY,
-        barril.largura, barril.altura,
-        barril.x, barril.y,
-        barril.width, barril.height
-      )
+      barril.obstaculos.forEach(function () {
+        contexto.drawImage(
+          spriteBarril,
+          barril.spriteX, barril.spriteY,
+          barril.largura, barril.altura,
+          barril.x, barril.y,
+          barril.width, barril.height
+        )
+      })
     },
+    obstaculos: [
+      {x: 1, y:1}
+    ],
+
     atualiza() {
-      
+      const passou100Frames = frames % 100 === 0;
+      barril.x = barril.x - 1
+      if (passou100Frames) {
+        console.log('passou 100 frames')
+        barril.desenha()
+      }
     }
   }
   return barril
