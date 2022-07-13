@@ -10,9 +10,59 @@ spriteInicio.src = './inicio.png'
 const spriteBarril = new Image();
 spriteBarril.src = './spritebarril.png'
 
+const hit = new Audio();
+hit.src = './hit.wav'
+
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 
+
+function criaPerson () {
+  const person = {
+    spriteX: 100,
+    spriteY: 85,
+    largura: 97,
+    altura: 168,
+    x: 10,
+    y: 315,
+    width: 80,
+    height: 80,
+    pulo: 30,
+    pula() {
+      console.log('devo pular');
+      if (person.y >= 310) {
+        person.velocidade = 0
+        setTimeout(() => { person.y = person.y - 20 }, 25)
+        setTimeout(() => { person.y = person.y - 20 }, 50)
+        setTimeout(() => { person.y = person.y - 20 }, 75)
+        setTimeout(() => { person.y = person.y - 20 }, 100)
+        setTimeout(() => { person.y = person.y - 20 }, 125)
+        setTimeout(() => { person.y = person.y - 20 }, 150)
+        setTimeout(() => { person.y = person.y - 20 }, 175)
+        setTimeout(() => { person.y = person.y - 20 }, 200)
+        setTimeout(() => { person.y = person.y - 20 }, 225)
+      }
+    },
+    gravidade: 0.25,
+    velocidade: 0,
+    atualiza() {
+      if (person.y <= 315) {
+        person.velocidade = person.velocidade + person.gravidade;
+        person.y = person.y + person.velocidade
+      }
+    },
+    desenha() {
+      contexto.drawImage(
+        sprites,
+        person.spriteX, person.spriteY,
+        person.largura, person.altura,
+        person.x, person.y,
+        person.width, person.height
+      )
+    }
+  }
+  return person
+}
 
 
 const telaInicial = {
@@ -35,6 +85,7 @@ const telaInicial = {
   }
 }
 const globais = {}
+
 const barril = {
   spriteX: 0,
   spriteY: 0,
@@ -81,53 +132,15 @@ const chao = {
 }
 
 
-const person = {
-  spriteX: 100,
-  spriteY: 85,
-  largura: 97,
-  altura: 168,
-  x: 10,
-  y: 315,
-  width: 80,
-  height: 80,
-  pulo: 30,
-  pula() {
-    console.log('devo pular');
-    if (person.y >= 310) {
-      person.velocidade = 0
-      setTimeout(() => { person.y = person.y - 20 }, 25)
-      setTimeout(() => { person.y = person.y - 20 }, 50)
-      setTimeout(() => { person.y = person.y - 20 }, 75)
-      setTimeout(() => { person.y = person.y - 20 }, 100)
-      setTimeout(() => { person.y = person.y - 20 }, 125)
-      setTimeout(() => { person.y = person.y - 20 }, 150)
-      setTimeout(() => { person.y = person.y - 20 }, 175)
-      setTimeout(() => { person.y = person.y - 20 }, 200)
-      setTimeout(() => { person.y = person.y - 20 }, 225)
-    }
-  },
-  gravidade: 0.25,
-  velocidade: 0,
-  atualiza() {
-    if (person.y <= 315) {
-      person.velocidade = person.velocidade + person.gravidade;
-      person.y = person.y + person.velocidade
-    }
-  },
-  desenha() {
-    contexto.drawImage(
-      sprites,
-      person.spriteX, person.spriteY,
-      person.largura, person.altura,
-      person.x, person.y,
-      person.width, person.height
-    )
-  }
-}
+
 
 let telaAtiva = {}
 function mudaParaTela(novaTela) {
   telaAtiva = novaTela
+
+  if(telaAtiva.inicializa) {
+    telaAtiva.inicializa()
+  }
 }
 
 const Telas = {
@@ -145,16 +158,19 @@ const Telas = {
 }
 
 Telas.JOGO = {
+  inicializa() {
+    globais.person = criaPerson()
+  },
   desenha() {
     chao.desenha()
-    person.desenha()
+    globais.person.desenha()
     barril.desenha()
   },
   click() {
-    person.pula()
+    globais.person.pula()
   },
   atualiza() {
-    person.atualiza()
+    globais.person.atualiza()
     barril.atualiza()
   }
 }
