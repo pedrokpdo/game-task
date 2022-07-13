@@ -90,7 +90,7 @@ function criaChao() {
     x: 0,
     y: 0,
     atualiza() {
-      const movimentoDoChao = 1;
+      const movimentoDoChao = 4;
       const repeteEm = chao.largura / 2
       const movimentacao = chao.x - movimentoDoChao
       chao.x = movimentacao % repeteEm
@@ -122,27 +122,49 @@ function criaBarril() {
     height: 60,
     velocidade: 0,
     desenha() {
-      barril.obstaculos.forEach(function () {
+      barril.obstaculos.forEach(function (obstaculos) {
         contexto.drawImage(
           spriteBarril,
           barril.spriteX, barril.spriteY,
           barril.largura, barril.altura,
-          barril.x, barril.y,
+          obstaculos.x, obstaculos.y,
           barril.width, barril.height
         )
+
       })
     },
-    obstaculos: [
-      {x: 1, y:1}
-    ],
+    temColisaoComOPerson(obstaculos) {
 
+      if (globais.person.x >= obstaculos.x & globais.person.y >= obstaculos.y) {
+        return true
+      }
+
+      return false
+    },
+    obstaculos: [
+      {
+        x: 315, y: 315,
+      },
+    ],
     atualiza() {
-      const passou100Frames = frames % 100 === 0;
-      barril.x = barril.x - 1
+      const passou100Frames = frames % 200 === 0;
       if (passou100Frames) {
         console.log('passou 100 frames')
-        barril.desenha()
+        barril.obstaculos.push({
+          x: canvas.width, y: 315
+        })
       }
+      barril.obstaculos.forEach((function (obstaculos) {
+        console.log(obstaculos.x)
+        console.log(obstaculos.y)
+        obstaculos.x = obstaculos.x - 8
+        if(obstaculos.x <= 0) {
+          barril.obstaculos.shift()
+        }
+        if (barril.temColisaoComOPerson(obstaculos)) {
+          mudaParaTela(Telas.INICIO)
+        }
+      }))
     }
   }
   return barril
